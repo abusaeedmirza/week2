@@ -117,103 +117,58 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"src/index.js":[function(require,module,exports) {
-var data_table = document.getElementById("data-table");
-document.getElementById("submit-data").addEventListener("click", myfunction);
-document.getElementById("empty-table").addEventListener("click", EmptyTable);
-function myfunction() {
-  var user = document.getElementById("input-username").value;
-  var email = document.getElementById("input-email").value;
-  var address = document.getElementById("input-address").value;
-  var admin = document.getElementById("input-admin").checked;
-  var image = document.getElementById("input-image").files[0];
-  var rownumber = FindUsername(user);
-  if (rownumber < 1) {
-    //if username is not matched
-    // creating a new row in the table
-    var newrow = data_table.insertRow();
-    // creating new cells in the row
-    var newcell1 = newrow.insertCell();
-    var newcell2 = newrow.insertCell();
-    var newcell3 = newrow.insertCell();
-    var newcell4 = newrow.insertCell();
-    var newcell5 = newrow.insertCell();
-    // putting input data in the cells
-    newcell1.innerHTML = user;
-    newcell2.innerHTML = email;
-    newcell3.innerHTML = address;
-    newcell4.innerHTML = admin ? "X" : "-";
-    if (image) {
-      // reading the file to upload image file in cell5
-      var reader = new FileReader();
-      reader.onload = function () {
-        var img = document.createElement("img");
-        img.src = reader.result;
-        img.width = 64;
-        img.height = 64;
-        newcell5.appendChild(img);
-      };
-      reader.readAsDataURL(image);
-    } else {
-      newcell5.textContent = "-";
+})({"node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+var bundleURL = null;
+function getBundleURLCached() {
+  if (!bundleURL) {
+    bundleURL = getBundleURL();
+  }
+  return bundleURL;
+}
+function getBundleURL() {
+  // Attempt to find the URL of the current script and use that as the base URL
+  try {
+    throw new Error();
+  } catch (err) {
+    var matches = ('' + err.stack).match(/(https?|file|ftp|chrome-extension|moz-extension):\/\/[^)\n]+/g);
+    if (matches) {
+      return getBaseURL(matches[0]);
     }
   }
-  if (rownumber >= 1) {
-    // if username is matched
-    //updating the exisiting row
-    var updatedrow = data_table.getElementsByTagName("tr");
-    var cells = updatedrow[rownumber].getElementsByTagName("td")[1];
-    cells.textContent = email;
-    cells = updatedrow[rownumber].getElementsByTagName("td")[2];
-    cells.textContent = address;
-    cells = updatedrow[rownumber].getElementsByTagName("td")[3];
-    cells.textContent = admin ? "X" : "-";
-    UpdateImage(image, updatedrow, rownumber, cells);
-  }
+  return '/';
 }
-function EmptyTable() {
-  var total_rows = data_table.rows.length;
-  for (var x = 1; total_rows > x; x++) {
-    data_table.deleteRow(-1);
-  }
+function getBaseURL(url) {
+  return ('' + url).replace(/^((?:https?|file|ftp|chrome-extension|moz-extension):\/\/.+)?\/[^/]+(?:\?.*)?$/, '$1') + '/';
 }
-function FindUsername(username) {
-  // this function compares the username if it already exists
-  var rows = data_table.getElementsByTagName("tr");
-  console.log("length is " + rows.length);
-  for (var i = 0; rows.length > i; i++) {
-    var cells = rows[i].getElementsByTagName("td")[0];
-    if (cells.textContent === username) {
-      console.log("yes it is matched");
-      var row = i;
-      return row;
-    } else {
-      var row = -1; // if user name is not matched is return -1
+exports.getBundleURL = getBundleURLCached;
+exports.getBaseURL = getBaseURL;
+},{}],"node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
+var bundle = require('./bundle-url');
+function updateLink(link) {
+  var newLink = link.cloneNode();
+  newLink.onload = function () {
+    link.remove();
+  };
+  newLink.href = link.href.split('?')[0] + '?' + Date.now();
+  link.parentNode.insertBefore(newLink, link.nextSibling);
+}
+var cssTimeout = null;
+function reloadCSS() {
+  if (cssTimeout) {
+    return;
+  }
+  cssTimeout = setTimeout(function () {
+    var links = document.querySelectorAll('link[rel="stylesheet"]');
+    for (var i = 0; i < links.length; i++) {
+      if (bundle.getBaseURL(links[i].href) === bundle.getBundleURL()) {
+        updateLink(links[i]);
+      }
     }
-  }
-
-  return row;
+    cssTimeout = null;
+  }, 50);
 }
-function UpdateImage(image, updatedrow, rownumber, cells) {
-  // update the image first deleting the old one
-  cells = updatedrow[rownumber].getElementsByTagName("td")[4];
-  var oldimg = cells.querySelector("img");
-  cells.removeChild(oldimg);
-  if (image) {
-    var reader = new FileReader();
-    reader.onload = function () {
-      var img = document.createElement("img");
-      img.src = reader.result;
-      img.width = 64;
-      img.height = 64;
-      cells.appendChild(img);
-    };
-    reader.readAsDataURL(image);
-  } else {
-    cells.textContent = "-";
-  }
-}
-},{}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+module.exports = reloadCSS;
+},{"./bundle-url":"node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -382,5 +337,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["node_modules/parcel-bundler/src/builtins/hmr-runtime.js","src/index.js"], null)
-//# sourceMappingURL=/src.a2b27638.js.map
+},{}]},{},["node_modules/parcel-bundler/src/builtins/hmr-runtime.js"], null)
+//# sourceMappingURL=/index.js.map
