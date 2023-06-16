@@ -53,7 +53,6 @@ function myfunction() {
 }
 function EmptyTable() {
   var total_rows = data_table.rows.length;
-
   for (let x = 1; total_rows > x; x++) {
     data_table.deleteRow(-1);
   }
